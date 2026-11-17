@@ -14,10 +14,6 @@
 #folha-de-rosto[
   #lorem(50)
 ]
-#ficha-catalografica()//talvez seja melhor tirar isso aqui
-#folha-de-aprovacao(
-  //provavelmente nao colocar isso tbm
-)
 
 #resumo[
   #lorem(100)
@@ -31,21 +27,24 @@
 
 #outline()
 
-= Introducao
-Texto de introducao com algo 
+= Introducao e contexto
+descricao do tema e importancia da analise
 
-= Desenvolvimento
-Toda a explicacao do pq escolhemos esse dataset, no desenvolvimento da aplicacao, treinamento, etc., etc., etc..
+= Descricao do dataset
+fonte, variaveis, periodo, quantidade de amostras
 
-= Desenvolvimento2 
-Verificar se sera necessario
+= Metodologia
+arquitetura da rede, funcoes de ativacao, parametros ajustados
+
+= Resultados obtido
+metricas, graficos e comparacao entre funcoes de ativacao
+
+= Discussao
+analise critica dos resultados e limitacoes do modelo
 
 = Conclusao
-Blah blah blah
+licoes aprendidas e potenciais melhorias
 
-//#bibliography("refs.bib")
-//referencia para esse template: https://typst.app/universe/package/abntly
-//nao entendi como usar essa funcao de referencias 
 
 
 
