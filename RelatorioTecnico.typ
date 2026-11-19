@@ -21,9 +21,10 @@ Relatório técnico apresentado como atividade avaliativa da disciplina de Siste
 O reconhecimento automático de caracteres manuscritos é um problema clássico de visão computacional e aprendizado de máquina, com aplicações como a leitura de cheques bancários, a triagem de correspondências por código postal e a digitalização de documentos físicos. Por ter classes bem definidas e imagens pequenas, o reconhecimento de dígitos é muito usado para avaliar e comparar técnicas de aprendizado supervisionado.
 
 Neste trabalho, uma Rede Neural Convolucional (CNN) foi aplicada à classificação de dígitos manuscritos de 0 a 9 a partir de imagens em tons de cinza. Diferentemente de uma rede densa, a CNN utiliza camadas convolucionais que extraem padrões locais da imagem, como bordas e traços, preservando a estrutura espacial dos pixels. O objetivo é avaliar o desempenho dessa arquitetura na tarefa de reconhecimento de dígitos e analisar suas limitações.
+O projeto também está disponível no seguinte link do github: https://github.com/MathingTC/Inteligencia-Artificial-Aplicada-a-Dados-Reais.
 
 = Descrição do dataset
-*Fonte:* foi utilizado o conjunto de dados MNIST (_Modified National Institute of Standards and Technology_), base de dígitos manuscritos amplamente difundida na literatura (LECUN et al., 1998). Os dados foram obtidos diretamente pela função _datasets.MNIST_ da biblioteca _torchvision_, que baixa os arquivos originais da base, sem o uso de arquivos CSV. // TODO: acrescentar a data de acesso e a referência LECUN et al. (1998) na lista de referências.
+*Fonte:* foi utilizado o conjunto de dados MNIST (_Modified National Institute of Standards and Technology_), base de dígitos manuscritos amplamente difundida na literatura (LECUN et al., 1998). Os dados foram obtidos diretamente pela função _datasets.MNIST_ da biblioteca _torchvision_, que baixa os arquivos originais da base, sem o uso de arquivos CSV.
 
 *Período:* não se aplica um período de coleta, pois se trata de uma base estática de imagens, sem dimensão temporal.
 
@@ -61,7 +62,7 @@ O modelo foi implementado em Python com a biblioteca PyTorch. A função de perd
 
 + *Funções de ativação:* a função ReLU foi aplicada após as duas convoluções e após a primeira camada linear. A camada de saída não usa ativação, pois fornece os _logits_ à função de perda. A ReLU foi escolhida por ser simples, computacionalmente barata e por mitigar o problema de desaparecimento do gradiente. Não houve comparação com outras funções de ativação.
 
-+ *Hiperparâmetros:* otimizador Adam com taxa de aprendizado de 0,001, lotes de 64 imagens, _dropout_ de 25% e no máximo 5 épocas. O treino é interrompido antes se a acurácia no conjunto de teste ultrapassar 95%. Esses são valores usuais para o MNIST e não foram obtidos por busca sistemática. // TODO: informar em qual época o treino parou (o código não registra isso; o critério de 95% costuma ser atingido já na 1ª época).
++ *Hiperparâmetros:* otimizador Adam com taxa de aprendizado de 0,001, lotes de 64 imagens, _dropout_ de 25% e no máximo 5 épocas. O treino é interrompido antes se a acurácia no conjunto de teste ultrapassar 95%. Esses são valores usuais para o MNIST e não foram obtidos por busca sistemática.
 
 = Resultados obtidos
 O modelo final foi avaliado nas 10.000 imagens do conjunto de teste. Ele acertou 9.889 imagens e errou 111, o que corresponde a uma acurácia de *98,89%* e a uma perda (entropia cruzada) de 0,0405.
@@ -93,10 +94,6 @@ A @fig-matriz apresenta a matriz de confusão, em que as linhas são o dígito r
   image("matriz_confusao_contagem.png", width: 85%),
   caption: [Matriz de confusão no conjunto de teste (contagem de imagens)],
 ) <fig-matriz>
-
-// TODO (opcional): o descritivo pede o vetor de erros por iteração. O código imprime a perda média a cada 200 lotes;
-// guardar esses valores em uma lista e gerar um gráfico de perda por iteração.
-// TODO: não há comparação entre funções de ativação, pois só a ReLU foi usada. Ver Discussão.
 
 = Discussão
 O desempenho de 98,89% mostra que a CNN extrai bem os padrões que distinguem os dígitos, mesmo com poucas épocas de treino. Os erros se concentram em formas que podem ser visualmente parecidas, como 7 e 2, 0 e 6, ou 9 com 4, 7 e 8, o que sugere que a rede erra principalmente em escritas ambíguas ou pouco convencionais. Esta é uma interpretação a partir da matriz de confusão, pois as imagens erradas não foram inspecionadas individualmente.
