@@ -4,10 +4,13 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
+import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+
 # Hyperparametros
 BATCH_SIZE = 64
 MAX_EPOCHS = 5
-MIN_ACC = .99
+MIN_ACC = .95
 LEARNING_RATE = 1e-3
 
 # Usa GPU se disponível
@@ -103,6 +106,9 @@ def evaluate():
     model.eval()
     correct, total, test_loss = 0, 0, 0.0
 
+    # Dados para matriz de confusão
+    all_predics, all_labels = [], []
+
     # Ignora computação do gradiente com `no_grad()`, já que não será chamado `backward()`.
     with torch.no_grad():
         for images, labels in test_loader:
@@ -118,18 +124,37 @@ def evaluate():
             correct += (predictions == labels).sum().item()
             total += labels.size(0)
 
+            all_predics.extend(predictions.cpu())
+            all_labels.extend(labels)
+
     accuracy = 100.0 * correct / total
     print(f"Test loss: {test_loss / total:.4f} | Test accuracy: {accuracy:.2f}%")
-    return accuracy
+    return accuracy, all_predics, all_labels
 
 # Loop principal
 # Passa por MAX_EPOCHS épocas ou até a acurácia for maior que MIN_ACC
+predics, labels = [], []
 for epoch in range(1, MAX_EPOCHS + 1):
     train_one_epoch(epoch)
-    acc = evaluate()
+    acc, predics, labels = evaluate()
 
     if acc > 100*MIN_ACC:
         break
+
+# Gera matriz de confusão
+disp = ConfusionMatrixDisplay.from_predictions(
+        labels,
+        predics,
+        display_labels=range(10),
+        normalize="true"
+)
+
+disp.ax_.set_title("Matriz Confusão - Dígitos MNIST")
+disp.ax_.set_xlabel("Previsão")
+disp.ax_.set_ylabel("Dado Real")
+plt.tight_layout()
+plt.savefig("confusionMatrix.png", dpi=150)
+plt.show()
 
 # Salva o modelo
 torch.save(model.state_dict(), "mnist_cnn.pth")
